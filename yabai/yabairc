@@ -10,15 +10,21 @@ yabai -m signal --add event=display_added action="sleep 2 && $HOME/.config/yabai
 yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.config/yabai/create_spaces.sh"
 yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
+#
+# yabai -m signal --add event=window_created app="KakaoTalk" title!="KakaoTalk" action="yabai -m window --insert stack"
+# yabai -m signal --add event=window_created app="KakaoTalk" title="KakaoTalk" action="yabai -m window --insert east"
+
+# yabai -m signal --add event=window_destroyed app="(Chrome|Alacritty|KakaoTalk|Slack|Notion)" action="yabai -m window --focus last"
+# yabai -m signal --add event=application_terminated app="(Chrome|Alacritty|KakaoTalk|Slack|Notion)" action="yabai -m window --focus last"
 
 $HOME/.config/yabai/create_spaces.sh
 
-yabai -m config external_bar               all:35:0     \
+yabai -m config external_bar               all:38:0     \
                 window_border              on           \
                 mouse_follows_focus        off          \
                 focus_follows_mouse        off          \
                 window_zoom_persist        off          \
-                window_placement           second_child \
+                window_placement           first_child \
                 window_topmost             off          \
                 window_shadow              float        \
                 window_opacity             off          \
@@ -46,20 +52,34 @@ yabai -m config external_bar               all:35:0     \
                 right_padding              4            \
                 window_gap                 6
 
-# Exclude problematic apps from being managed:
-yabai -m rule --add app="^(LuLu|Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
-# yabai -m rule --add app="^Safari$" manage=off
-# yabai -m rule --add app="^Google Chrome$" manage=off
-yabai -m rule --add app="^Docker Desktop$" manage=off
-yabai -m rule --add app="^System Information" manage=off
-yabai -m rule --add app="^KakaoTalk" manage=off
-yabai -m rule --add app="^Finder" manage=off
-# yabai -m rule --add app="^Fig" manage=off
-# yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
-# yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
-# yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
-#yabai -m rule --add label="Select file to save to" app="^Inkscape$" title="Select file to save to" manage=off
 
-yabai -m config layout bsp
+# yabai -m config insert_feedback_color 0x00FFFFFF
+
+yabai -m config layout float
+
+# Exclude problematic apps from being managed:
+# yabai -m rule --add app="^(LuLu|Calculator|Software Update|Dictionary|VLC|Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+# yabai -m rule --add app="^Docker Desktop$" manage=off
+# yabai -m rule --add app="^(System Information|System Settings|System Preferences)" manage=off mouse_follows_focus=on
+# yabai -m rule --add app="^Finder" manage=off
+# yabai -m rule --add app="^Fig" manage=off
+# yabai -m rule --add app="^Tunnelblick" manage=off
+# yabai -m rule --add app="^BuhoCleaner" manage=off
+# yabai -m rule --add app="^AltTab" manage=off
+# yabai -m rule --add app!="^(Notion|KakaoTalk|Slack|Chrome|Alacritty)" manage=off
+
+# Manage apps with custom settingsy$" space=^2
+#
+# yabai -m rule --add app="^Notion$" mouse_follows_focus=on
+# yabai -m rule --add app="^KakaoTalk$" mouse_follows_focus=on
+# yabai -m rule --add app="^Slack$" mouse_follows_focus=on
+
+# yabai -m rule --add app="^Chrome$" mouse_follows_focus=on
+# yabai -m rule --add app="^Alacritty$" mouse_follows_focus=on
+# yabai -m rule --add app="^Finder$" mouse_follows_focus=on
+
+# yabai -m signal --add event=window_created action='stack2'
+# yabai -m signal --add event=window_moved action='stack2'
+
 
 echo "yabai configuration loaded.."

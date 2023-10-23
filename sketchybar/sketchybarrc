@@ -9,31 +9,30 @@ PLUGIN_DIR="$CONFIG_DIR/plugins" # Directory where all the plugin scripts are st
 FONT="SF Pro" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
 PADDINGS=3 # All paddings use this value (icon, label, background)
 
-# Setting up and starting the helper process
-HELPER=git.felix.helper
-killall helper
-(cd $CONFIG_DIR/helper && make)
-$CONFIG_DIR/helper/helper $HELPER > /dev/null 2>&1 &
+# # Setting up and starting the helper process
+# HELPER=git.felix.helper
+# killall helper
+# (cd $CONFIG_DIR/helper && make)
+# $CONFIG_DIR/helper/helper $HELPER > /dev/null 2>&1 &
 
 # Unload the macOS on screen indicator overlay for volume change
 launchctl unload -F /System/Library/LaunchAgents/com.apple.OSDUIHelper.plist > /dev/null 2>&1 &
 
 # Setting up the general bar appearance of the bar
 bar=(
-  height=45
+  corner_radius=11
+  height=28
   color=$BAR_COLOR
   border_width=2
   border_color=$BAR_BORDER_COLOR
   shadow=off
   position=top
   sticky=on
-  padding_right=10
-  padding_left=10
-  y_offset=-5
-  margin=-2
+  y_offset=6
+  margin=7
+  topmost=window
 )
 
-sketchybar --bar "${bar[@]}"
 
 # Setting up default values
 defaults=(
@@ -49,17 +48,17 @@ defaults=(
   padding_right=$PADDINGS
   padding_left=$PADDINGS
   background.height=26
-  background.corner_radius=9
+  background.corner_radius=11
   background.border_width=2
   popup.background.border_width=2
-  popup.background.corner_radius=9
+  popup.background.corner_radius11
   popup.background.border_color=$POPUP_BORDER_COLOR
   popup.background.color=$POPUP_BACKGROUND_COLOR
   popup.blur_radius=20
   popup.background.shadow.drawing=on
 )
 
-sketchybar --default "${defaults[@]}"
+sketchybar  --bar "${bar[@]}" --default "${defaults[@]}"
 
 # Left
 source "$ITEM_DIR/apple.sh"
@@ -67,18 +66,34 @@ source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/yabai.sh"
 source "$ITEM_DIR/front_app.sh"
 
-# Center
-source "$ITEM_DIR/spotify.sh"
-
 # Right
 source "$ITEM_DIR/calendar.sh"
-source "$ITEM_DIR/brew.sh"
-source "$ITEM_DIR/github.sh"
+
+sketchybar --add alias "TextInputMenuAgent,Item-0" right \
+           --set "TextInputMenuAgent,Item-0" padding_left=0 padding_right=10 label.width=0 update_freq=1
+
+sketchybar --add alias "PureVPN,Item-0" right \
+           --set "PureVPN,Item-0" padding_left=0 padding_right=-5 label.width=0 update_freq=5 \
+                 click_script="open -a /Applications/PureVPN.app"
+
+source "$ITEM_DIR/wifi.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
-source "$ITEM_DIR/cpu.sh"
+#source "$ITEM_DIR/imenu_stats.sh"
+source "$ITEM_DIR/stats.sh"
+
+
+status_bracket=(
+  background.color=$BACKGROUND_1
+  background.border_color=$BACKGROUND_2
+)
+
+sketchybar --add bracket status "TextInputMenuAgent,Item-0" wifi battery github.bell volume_icon \
+           --set status "${status_bracket[@]}"
+sketchybar --bar topmost=off
 
 # Forcing all item scripts to run (never do this outside of sketchybarrc)
 sketchybar --update
 
 echo "sketchybar configuation loaded.."
+

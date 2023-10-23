@@ -36,24 +36,3 @@ do
              --subscribe space.$sid mouse.clicked
 done
 
-spaces_bracket=(
-  background.color=$BACKGROUND_1
-  background.border_color=$BACKGROUND_2
-)
-
-separator=(
-  icon=􀆊
-  icon.font="$FONT:Heavy:16.0"
-  padding_left=10
-  padding_right=8
-  label.drawing=off
-  associated_display=active
-  click_script='yabai -m space --create && sketchybar --trigger space_change'
-  icon.color=$WHITE
-)
-
-sketchybar --add bracket spaces_bracket '/space\..*/'  \
-           --set spaces_bracket "${spaces_bracket[@]}" \
-                                                       \
-           --add item separator left                   \
-           --set separator "${separator[@]}"

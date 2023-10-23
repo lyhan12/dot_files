@@ -1,12 +1,19 @@
 ## Navigation (lalt - ...)
 # Space Navigation (four spaces per display): lalt - {1, 2, 3, 4}
-shift + lalt - 1 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[1] ]] && yabai -m space --focus $SPACES[1]
-shift + lalt - 2 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[2] ]] && yabai -m space --focus $SPACES[2]
-shift + lalt - 3 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[3] ]] && yabai -m space --focus $SPACES[3]
-shift + lalt - 4 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[4] ]] && yabai -m space --focus $SPACES[4]
-
-shift + lalt - n : yabai -m space --focus next
-shift + lalt - p : yabai -m space --focus prev
+lalt - 1    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[1]  ]] && yabai -m space --focus $SPACES[1]
+lalt - 2    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[2]  ]] && yabai -m space --focus $SPACES[2]
+lalt - 3    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[3]  ]] && yabai -m space --focus $SPACES[3]
+lalt - 4    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[4]  ]] && yabai -m space --focus $SPACES[4]
+lalt - 5    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[5]  ]] && yabai -m space --focus $SPACES[5]
+lalt - 6    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[6]  ]] && yabai -m space --focus $SPACES[6]
+lalt - 7    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[7]  ]] && yabai -m space --focus $SPACES[7]
+lalt - 8    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[8]  ]] && yabai -m space --focus $SPACES[8]
+lalt - 9    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[9]  ]] && yabai -m space --focus $SPACES[9]
+lalt - 0    : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[10] ]] && yabai -m space --focus $SPACES[10]
+lalt - 0x1B : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[11] ]] && yabai -m space --focus $SPACES[11]
+lalt - 0x18 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[12] ]] && yabai -m space --focus $SPACES[12]
+# 0x1B : -
+# ox18 : +
 
 
 # Window Navigation (through display borders): lalt - {j, k, l, ö}
@@ -14,19 +21,30 @@ lalt - h    : yabai -m window --focus west  || yabai -m display --focus west
 lalt - j    : yabai -m window --focus south || yabai -m display --focus south
 lalt - k    : yabai -m window --focus north || yabai -m display --focus north
 lalt - l    : yabai -m window --focus east  || yabai -m display --focus east
+lalt - 0x7B    : yabai -m window --focus west  || yabai -m display --focus west
+lalt - 0x7D    : yabai -m window --focus south || yabai -m display --focus south
+lalt - 0x7E    : yabai -m window --focus north || yabai -m display --focus north
+lalt - 0x7C    : yabai -m window --focus east  || yabai -m display --focus east
+# 
 
 # Extended Window Navigation: lalt - {h, ä}
-# lalt - g : yabai -m window --focus first
-# lalt - ; : yabai -m window --focus  last
+lalt - g : yabai -m window --focus first
+lalt - 0x29 : yabai -m window --focus  last
+# 0x29 : ; 
 
-# Floa  Unfloat window: lalt - space
+# Stack Navigation: shift + ctrl - {n, p}
+# lalt - n : yabai -m space --focus next
+# lalt - p : yabai -m space --focus prev
+lalt - n : yabai -m window --focus stack.next
+lalt - p : yabai -m window --focus stack.prev
+
+
+# Float or Unfloat window: lalt - space
 lalt - space : yabai -m window --toggle float; sketchybar --trigger window_focus
 
-# Make window zoom to fullscreen: shift + lalt - f
-shift + lalt - f : yabai -m window --toggle zoom-fullscreen; sketchybar --trigger window_focus
-
 # Make window zoom to parent node: lalt - f 
-lalt - f : yabai -m window --toggle zoom-parent; sketchybar --trigger window_focus
+lalt - 0x24 : yabai -m window --toggle zoom-fullscreen; sketchybar --trigger window_focus
+# 0x24 : Enter
 
 ## Window Movement (shift + lalt - ...)
 # Moving windows in spaces: shift + lalt - {j, k, l, ö}
@@ -38,33 +56,73 @@ shift + lalt - l : yabai -m window --warp east || $(yabai -m window --display ea
 # Toggle split orientation of the selected windows node: shift + lalt - s
 shift + lalt - s : yabai -m window --toggle split
 
+# Mirror Space on X and Y Axis: shift + lalt - {x, y}
+shift + lalt - x : yabai -m space --mirror x-axis
+shift + lalt - y : yabai -m space --mirror y-axis\
+
 # Moving windows between spaces: shift + lalt - {1, 2, 3, 4, p, n } (Assumes 4 Spaces Max per Display)
-shift + cmd - 1 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[1] ]] && \
+shift + lalt - 1 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[1] ]] && \
                    WINDOW="$(yabai -m query --windows --window | jq '.id')" \
                   && yabai -m window --space $SPACES[1] --focus $WINDOW \
                   && sketchybar --trigger windows_on_spaces
 
-shift + cmd - 2 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[2] ]] && \
+shift + lalt - 2 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[2] ]] && \
                    WINDOW="$(yabai -m query --windows --window | jq '.id')" \
                   && yabai -m window --space $SPACES[2] --focus $WINDOW \
                   && sketchybar --trigger windows_on_spaces
 
-shift + cmd - 3 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[3] ]] && \
+shift + lalt - 3 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[3] ]] && \
                    WINDOW="$(yabai -m query --windows --window | jq '.id')" \
                   && yabai -m window --space $SPACES[3] --focus $WINDOW \
                   && sketchybar --trigger windows_on_spaces
 
-shift + cmd - 4 : SPACES=($(yabai -m query --displays --display | jq '.spaces[]')) && [[ -n $SPACES[4] ]] && \
+shift + lalt - 4 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[4] ]] && \
                    WINDOW="$(yabai -m query --windows --window | jq '.id')" \
                   && yabai -m window --space $SPACES[4] --focus $WINDOW \
                   && sketchybar --trigger windows_on_spaces
 
-shift + lalt - p : yabai -m window --space prev && yabai -m space --focus prev && sketchybar --trigger windows_on_spaces
-shift + lalt - n : yabai -m window --space next && yabai -m space --focus next && sketchybar --trigger windows_on_spaces
+shift + lalt - 5 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[5] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[5] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
 
-# Mirror Space on X and Y Axis: shift + lalt - {x, y}
-shift + lalt - x : yabai -m space --mirror x-axis
-shift + lalt - y : yabai -m space --mirror y-axis
+shift + lalt - 6 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[6] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[6] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 7 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[7] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[7] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 8 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[8] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[8] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 9 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[9] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[9] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 0 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[10] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[10] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 0x1B : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[11] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[11] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+shift + lalt - 0x18 : SPACES=($(yabai -m query --displays | jq '.[].spaces[]')) && [[ -n $SPACES[12] ]] && \
+                   WINDOW="$(yabai -m query --windows --window | jq '.id')" \
+                  && yabai -m window --space $SPACES[12] --focus $WINDOW \
+                  && sketchybar --trigger windows_on_spaces
+
+# shift + lalt - p : yabai -m window --space prev && yabai -m space --focus prev && sketchybar --trigger windows_on_spaces
+# shift + lalt - n : yabai -m window --space next && yabai -m space --focus next && sketchybar --trigger windows_on_spaces
 
 ## Stacks (shift + ctrl - ...)
 # Add the active window to the window or stack to the {direction}: shift + ctrl - {j, k, l, ö}
@@ -72,10 +130,17 @@ shift + ctrl - h    : yabai -m window  west --stack $(yabai -m query --windows -
 shift + ctrl - j    : yabai -m window south --stack $(yabai -m query --windows --window | jq -r '.id') && sketchybar --trigger window_focus
 shift + ctrl - k    : yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id') && sketchybar --trigger window_focus
 shift + ctrl - l    : yabai -m window  east --stack $(yabai -m query --windows --window | jq -r '.id') && sketchybar --trigger window_focus
+shift + ctrl - w    :  window=$(yabai -m query --windows --window | jq -r '.id') && $(yabai -m window $window --toggle float && yabai -m window $window --toggle float) && sketchybar --trigger window_focus
 
-# Stack Navigation: shift + ctrl - {n, p}
-shift + ctrl - n : yabai -m window --focus stack.next
-shift + ctrl - p : yabai -m window --focus stack.prev
+# shift + ctrl - h    : yabai -m window --swap west
+# shift + ctrl - j    : yabai -m window --swap south
+# shift + ctrl - k    : yabai -m window --swap north
+# shift + ctrl - l    : yabai -m window --swap east
+# shift + ctrl - h    : stack west && sketchybar --trigger window_focus
+# shift + ctrl - j    : stack south && sketchybar --trigger window_focus
+# shift + ctrl - k    : stack north && sketchybar --trigger window_focus
+# shift + ctrl - l    : stack east && sketchybar --trigger window_focus
+
 
 ## Resize (ctrl + lalt - ...)
 # Resize windows: ctrl + lalt - {j, k, l, ö}
@@ -96,20 +161,20 @@ shift + ctrl + lalt - b : yabai -m config window_border on
 
 ## Insertion (shift + ctrl + lalt - ...)
 # Set insertion point for focused container: shift + ctrl + lalt - {j, k, l, ö, s}
-shift + ctrl + lalt - h : yabai -m window --insert west
-shift + ctrl + lalt - j : yabai -m window --insert south
-shift + ctrl + lalt - k : yabai -m window --insert north
-shift + ctrl + lalt - l : yabai -m window --insert east
-shift + ctrl + lalt - s : yabai -m window --insert stack
+# shift + ctrl + lalt - h : yabai -m window --insert west
+# shift + ctrl + lalt - j : yabai -m window --insert south
+# shift + ctrl + lalt - k : yabai -m window --insert north
+# shift + ctrl + lalt - l : yabai -m window --insert east
+shift + ctrl - s : yabai -m window --insert stack
 
 ## Misc
 # Open new Alacritty window
-lalt - t : alacritty msg create-window
+ctrl + cmd - t : alacritty msg create-window
 
 # New window in hor./ vert. splits for all applications with yabai
-lalt - s : yabai -m window --insert east/;  skhd -k "cmd - n"
+lalt - s : yabai -m window --insert stack;  skhd -k "cmd - n"
+lalt - h : yabai -m window --insert east;  skhd -k "cmd - n"
 lalt - v : yabai -m window --insert south; skhd -k "cmd - n"
-
 # Toggle sketchybar
 shift + lalt - space : sketchybar --bar hidden=toggle
 shift + lalt - r : sketchybar --remove '/.*/' && sh -c 'export CONFIG_DIR=$HOME/.config/sketchybar && $CONFIG_DIR/sketchybarrc'
